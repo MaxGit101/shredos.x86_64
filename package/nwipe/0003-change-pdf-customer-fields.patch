@@ -1,0 +1,41 @@
+--- create_pdf.c.original	2025-09-16 19:15:06.348425223 +0000
++++ create_pdf.c.modified	2025-09-16 19:15:06.348425223 +0000
+@@ -108,7 +108,7 @@
+     /* variables used by libconfig */
+     config_setting_t* setting;
+     const char *business_name, *business_address, *contact_name, *contact_phone, *op_tech_name, *customer_name,
+-        *customer_address, *customer_contact_name, *customer_contact_phone;
++        *inventory_number, *customer_contact_phone;
+
+     /* ------------------ */
+     /* Initialise Various */
+@@ -193,8 +193,8 @@
+     pdf_add_line( pdf, NULL, 50, 450, 550, 450, 1, PDF_GRAY );
+     pdf_add_text( pdf, NULL, "Customer Details", 12, 50, 530, PDF_BLUE );
+     pdf_add_text( pdf, NULL, "Name:", 12, 60, 510, PDF_GRAY );
+-    pdf_add_text( pdf, NULL, "Address:", 12, 60, 490, PDF_GRAY );
+-    pdf_add_text( pdf, NULL, "Contact Name:", 12, 60, 470, PDF_GRAY );
++    pdf_add_text( pdf, NULL, "Device Name:", 12, 60, 490, PDF_GRAY );
++    pdf_add_text( pdf, NULL, "Inventory Number:", 12, 60, 470, PDF_GRAY );
+     pdf_add_text( pdf, NULL, "Contact Phone:", 12, 300, 470, PDF_GRAY );
+
+     /* Obtain current customer details from nwipe.conf - See conf.c */
+@@ -206,13 +206,12 @@
+         {
+             pdf_add_text( pdf, NULL, customer_name, text_size_data, 100, 510, PDF_BLACK );
+         }
+-        if( config_setting_lookup_string( setting, "Customer_Address", &customer_address ) )
+-        {
+-            pdf_add_text( pdf, NULL, customer_address, text_size_data, 110, 490, PDF_BLACK );
+-        }
+-        if( config_setting_lookup_string( setting, "Contact_Name", &customer_contact_name ) )
++        /* Add the device name to the PDF */
++        pdf_add_text( pdf, NULL, c->device_name, text_size_data, 140, 490, PDF_BLACK );
++
++        if( config_setting_lookup_string( setting, "Inventory_Number", &inventory_number ) )
+         {
+-            pdf_add_text( pdf, NULL, customer_contact_name, text_size_data, 145, 470, PDF_BLACK );
++            pdf_add_text( pdf, NULL, inventory_number, text_size_data, 160, 470, PDF_BLACK );
+         }
+         if( config_setting_lookup_string( setting, "Contact_Phone", &customer_contact_phone ) )
+         {
